@@ -1,0 +1,22 @@
+plugins {
+    id 'java-library'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+group 'com.proles-ticket-to-json'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+mainClassName = 'com.zeiterfassung.web.proles.proles2json.ProlesTicketToJson'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.5'
+    implementation files('libs/zeiterfassung-web-bucher-1.0-SNAPSHOT.jar')
+}
