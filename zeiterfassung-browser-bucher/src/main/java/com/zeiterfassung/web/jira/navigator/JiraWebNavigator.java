@@ -1,0 +1,49 @@
+package com.zeiterfassung.web.jira.navigator;
+
+import com.zeiterfassung.web.common.book.record.BookRecordEntry;
+import com.zeiterfassung.web.common.impl.navigate.BaseWebNavigator;
+import com.zeiterfassung.web.common.impl.navigate.BaseWebNavigatorHelper;
+import com.zeiterfassung.web.jira.constant.JiraWebConstant;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+public class JiraWebNavigator extends BaseWebNavigator<BaseWebNavigatorHelper> {
+   public JiraWebNavigator(String userName, String userPassword, String propertiesName) {
+      super(userName, userPassword, propertiesName);
+   }
+
+   @Override
+   public WebElement getBookingDateInputField() {
+      return getElementById(JiraWebConstant.DATE_INPUT_FIELD_ID);
+   }
+
+   @Override
+   protected BaseWebNavigatorHelper createWebNavigatorHelper(WebDriver webDriver) {
+      return new JiraWebNavigatorHelper(webDriver);
+   }
+
+   @Override
+   protected void navigateToBookingPage4BookRecord(BookRecordEntry bookRecordEntry) {
+
+   }
+
+   @Override
+   protected String getElementId2WaitForBookingPageReady() {
+      return JiraWebConstant.MORE_OPERATIONS_DROPDOWN_ID;
+   }
+
+   @Override
+   protected String getUserPasswordInputFieldId() {
+      return JiraWebConstant.USER_PASSWORD_INPUT_FIELD_ID;
+   }
+
+   @Override
+   protected String getUserNameInputFieldId() {
+      return JiraWebConstant.USER_NAME_INPUT_FIELD_ID;
+   }
+
+   @Override
+   protected String getLoginSubmitButtonId() {
+      return JiraWebConstant.LOGIN_SUBMIT_BUTTON_ID;
+   }
+}
