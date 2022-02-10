@@ -8,6 +8,8 @@ import com.zeiterfassung.web.common.constant.BaseWebConst;
 import com.zeiterfassung.web.common.impl.navigate.BaseWebNavigator;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,9 +72,18 @@ public abstract class BaseWebBooker<B extends BaseWebNavigator<?>> {
       WebElement elementDate = baseWebNavigator.getBookingDateInputField();
       // Note, that elementDate.clear() does not work always. Sometimes this causes an error, because the date-field contains 'not a valid date'
       // Anyway, setting the date directly also does not work without either clearing or selecting its current input.
-      elementDate.sendKeys(Keys.chord(Keys.CONTROL, "A"));
-      elementDate.sendKeys(date);
-      elementDate.sendKeys("\t");
+      // However.. just sending 'Keys.Control, "a", Keys.DELETE' (or BACK_SPACE) also suddenly don't work anymore, since then a strange character like [] remains on the input field.
+      // Getting tired of this
+      baseWebNavigator.createNewActions()
+              .keyDown(elementDate, Keys.CONTROL)
+              .pause(200)
+              .sendKeys(elementDate, "a")
+              .keyUp(Keys.CONTROL)
+              .pause(200)
+              .sendKeys(elementDate, Keys.BACK_SPACE)
+              .sendKeys(date)
+              .sendKeys("\t")
+              .perform();
    }
 
    private void bookSingleEntry(BookRecordEntry bookRecordEntry) {

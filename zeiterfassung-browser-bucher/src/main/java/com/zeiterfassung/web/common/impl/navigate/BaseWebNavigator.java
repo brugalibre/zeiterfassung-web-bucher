@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -100,6 +101,15 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
 
    public void waitForElementWithId(String id) {
       this.webNavigatorHelper.waitForElementWithId(id);
+   }
+
+   /**
+    * Creates a new {@link Actions} for interactions with a {@link WebElement}
+    *
+    * @return a new {@link Actions} for interactions with a {@link WebElement}
+    */
+   public Actions createNewActions() {
+      return new Actions(webDriver);
    }
 
    /**
