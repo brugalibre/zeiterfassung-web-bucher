@@ -5,6 +5,7 @@ import com.zeiterfassung.web.common.impl.navigate.BaseWebBookNavigator;
 import com.zeiterfassung.web.common.impl.navigate.BaseWebNavigator;
 import com.zeiterfassung.web.proles.ProlesNavigatorHelper;
 import com.zeiterfassung.web.proles.constant.ProlesWebConst;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -21,7 +22,7 @@ public class ProlesWebNavigator extends BaseWebBookNavigator<ProlesNavigatorHelp
 
    @Override
    public WebElement getBookingDateInputField() {
-      return getElementById(WEB_ELEMENT_DATE_FIELD_ID);
+      return this.webNavigatorHelper.getElement(By.id(WEB_ELEMENT_DATE_FIELD_ID));
    }
 
    public String evalRowIdByCustomerProjectAndActivity(String customer, String project, String activity) {

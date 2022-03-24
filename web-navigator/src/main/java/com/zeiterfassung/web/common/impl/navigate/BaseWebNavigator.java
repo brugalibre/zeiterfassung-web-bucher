@@ -5,7 +5,6 @@ import com.zeiterfassung.web.common.inout.PropertyReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.DriverManagerType;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -15,7 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
-import java.util.Optional;
+import java.time.temporal.ChronoUnit;
 
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
@@ -43,6 +42,10 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       readNonCredentialProperties(propertiesName);
    }
 
+   public T getHelper(){
+      return webNavigatorHelper;
+   }
+
    /**
     * Initializes the {@link WebDriverManager} and creates a new {@link WebDriver}
     * This method may take a while and needs a connection to the internet
@@ -59,7 +62,18 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
          WebDriverManager.getInstance(driverManagerType).setup();
       }
       this.webDriver = driverManagerHelper.createNewWebDriver();
+      setOptions();
       this.webNavigatorHelper = createWebNavigatorHelper(webDriver);
+   }
+
+   /**
+    * Performs a login on the page, defined in the properties file
+    * This includes entering navigating to the login page and entering username & password as well as submitting the form.
+    * Afterwards this {@link BaseWebNavigator} waits until the submit-button is disappeared
+    */
+   public void navigateToPageAndLogin() {
+      navigateToPage(loginPage);
+      login();
    }
 
    /**
@@ -68,7 +82,6 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
     * Afterwards this {@link BaseWebNavigator} waits until the submit-button is disappeared
     */
    public void login() {
-      navigateToPage(loginPage);
       enterUserName();
       enterUserPassword();
       clickSubmitButton();
@@ -81,20 +94,12 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       webDriver.close();
    }
 
-   public WebElement getElementById(String s) {
-      return webDriver.findElement(By.id(s));
-   }
-
-   public Optional<WebElement> findWebElementById(String id) {
-      return webNavigatorHelper.findWebElementById(id);
-   }
-
-   public WebElement findWebElementByNameTagNameAndValue(WebElement searchContext, String nameValue, String attrName, String expectedAttrValue) {
-      return this.webNavigatorHelper.findWebElementByNameTagNameAndValue(searchContext, nameValue, attrName, expectedAttrValue);
-   }
-
    public void waitForElementWithId(String id) {
-      this.webNavigatorHelper.waitForElementWithId(id);
+      waitForVisibilityOfElement(By.id(id), 4000);
+   }
+
+   public void waitForVisibilityOfElement(By by, long millis) {
+      this.webNavigatorHelper.waitForVisibilityOfElement(by, millis);
    }
 
    /**
@@ -106,15 +111,19 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       return new Actions(webDriver);
    }
 
-   protected void clickButtonByIdAndWait(String buttonId) {
-      WebElement button = getElementById(buttonId);
+   private void submitButtonByIdAndWait4Disappear(String buttonId) {
+      WebElement button = webDriver.findElement(By.id(buttonId));
+      submitButtonAndWait4Invisibility(button);
+   }
+
+   protected void submitButtonAndWait4Invisibility(WebElement button) {
       button.submit();
       WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofMillis(10000));
       wait.until(ExpectedConditions.invisibilityOf(button));
    }
 
    protected void enterUserName() {
-      WebElement textUserName = getElementById(getUserNameInputFieldId());
+      WebElement textUserName = webDriver.findElement(By.id(getUserNameInputFieldId()));
       textUserName.sendKeys(userName);
    }
 
@@ -132,6 +141,10 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
 
    protected abstract String getLoginSubmitButtonId();
 
+   protected void executeScript(String script, WebElement webElement) {
+      this.webNavigatorHelper.executeScript(script, webElement);
+   }
+
    protected void navigateToPage(String pageUrl) {
       try {
          webDriver.navigate()
@@ -142,14 +155,22 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    }
 
    private void clickSubmitButton() {
-      clickButtonByIdAndWait(getLoginSubmitButtonId());
+      String loginSubmitButtonId = getLoginSubmitButtonId();
+      if (nonNull(loginSubmitButtonId)){
+         submitButtonByIdAndWait4Disappear(loginSubmitButtonId);
+      } else {
+         WebElement submitButton = findLoginSubmitButton();
+         submitButtonAndWait4Invisibility(submitButton);
+      }
+   }
+
+   protected WebElement findLoginSubmitButton() {
+      return null;// by default this does nothing
    }
 
    private void enterUserPassword() {
-      WebElement textUserPwd = getElementById(getUserPasswordInputFieldId());
-      JavascriptExecutor executor = (JavascriptExecutor) webDriver;
-      executor.executeScript("arguments[0].setAttribute('value', '" + userPassword + "')", textUserPwd);
-      // textUserPwd.sendKeys(userPassword); // does not work with !: is filtered by sendKeys
+      WebElement textUserPwd = webDriver.findElement(By.id(getUserPasswordInputFieldId()));
+      executeScript("arguments[0].setAttribute('value', '" + userPassword + "')", textUserPwd);
    }
 
    private void readNonCredentialProperties(String propertiesName) {
@@ -158,6 +179,15 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       proxy = propertyReader.readValue("proxy");
       String browserName = propertyReader.readValue("browserName");
       this.driverManagerHelper = new DriverManagerHelper(browserName);
+   }
+
+   private void setOptions() {
+      this.webDriver.manage()
+              .window()
+              .maximize();
+      this.webDriver.manage()
+              .timeouts()
+              .pageLoadTimeout(Duration.of(10, ChronoUnit.SECONDS));
    }
 }
 

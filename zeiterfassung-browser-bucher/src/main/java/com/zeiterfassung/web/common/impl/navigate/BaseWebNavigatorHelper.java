@@ -1,8 +1,8 @@
 package com.zeiterfassung.web.common.impl.navigate;
 
 import com.zeiterfassung.web.common.WebElementEvaluator;
-import com.zeiterfassung.web.common.navigate.util.WebNavigateUtil;
 import com.zeiterfassung.web.common.impl.WebElementEvaluatorImpl;
+import com.zeiterfassung.web.common.navigate.util.WebNavigateUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -111,13 +111,10 @@ public class BaseWebNavigatorHelper {
    /**
     * Finds a parent {@link WebElement} for a child, defined by the given <code>tagName</code> and <code>expectedInnerHtmlValue</code>
     * The parent can be matched with the given <code>parentsWebElementType</code>.
-    * This method is e.g. used to find a button {@link WebElement} which displays a certain text. This text is not displayed by the button itself,
-    * but by a child element of this button. So this child element defined by a certain tag as well as the buttons text
     * <p>
-    * The tree with {@link WebElement} is traversed, using a <code>By.xpath("./..")</code> starting by the given child (<code>expectedInnerHtmlValue</code>)
-    * If this child is found, than it's parent, which is also defined by a certaint tag name, is located by traversing the tree of {@link WebElement} upwards
-    * until a {@link WebElement} with the <code>parentsWebElementType</code> html-tag is found
+    * The tree with {@link WebElement} is traversed, using a <code>By.xpath("./..")</code> starting by the given child
     * <p>
+    * This method is simply a convinient variant of calling
     *
     * @param searchContext          the search context to look in
     * @param tagName                the tagName of the {@link WebElement}, e.g. 'Button' or 'span'
@@ -127,11 +124,8 @@ public class BaseWebNavigatorHelper {
     * @see findWebElementByTageNameAndInnerHtmlValue
     */
    public Optional<WebElement> findParentWebElement4ChildTagNameAndInnerHtmlValue(WebElement searchContext, String tagName, String expectedInnerHtmlValue, String parentsWebElementType) {
-      Optional<WebElement> childWebElement = findWebElementByTageNameAndInnerHtmlValue(searchContext, tagName, expectedInnerHtmlValue);
-      if (childWebElement.isEmpty()) {
-         return Optional.empty();
-      }
-      return findParentWebElement4ChildAndType(childWebElement.get(), parentsWebElementType);
+      WebElement childWebElement = getWebElementByTageNameAndInnerHtmlValue(searchContext, tagName, expectedInnerHtmlValue);
+      return findParentWebElement4ChildAndType(childWebElement, parentsWebElementType);
    }
 
    /**
@@ -199,11 +193,7 @@ public class BaseWebNavigatorHelper {
    }
 
    public void waitForElementToBeClickable(WebElement webElement) {
-      waitForElementToBeClickable(webElement, Duration.ofMillis(8000));
-   }
-
-   public void waitForElementToBeClickable(WebElement webElement, Duration duration) {
-      WebDriverWait wait = new WebDriverWait(webDriver, duration);
+      WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofMillis(6000));
       wait.until(ExpectedConditions.elementToBeClickable(webElement));
    }
 

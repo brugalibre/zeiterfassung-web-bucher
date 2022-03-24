@@ -55,7 +55,7 @@ public class ProlesTicketExtractor extends ProlesWebNavigator {
     * @return a list of {@link ProlesTicketImport}
     */
    public List<ProlesTicketImport> extractProlesTickets() {
-      login();
+      navigateToPageAndLogin();
       navigateToBookingPage(null);
       waitForElementWithId(WEB_ELEMENT_BOOK_TABLE_ID);
       BookableTableContent bookableTableContent = readTableAndCreateBookableTableContent();

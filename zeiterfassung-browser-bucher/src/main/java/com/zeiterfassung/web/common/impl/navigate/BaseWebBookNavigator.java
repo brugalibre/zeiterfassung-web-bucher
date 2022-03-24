@@ -1,6 +1,7 @@
 package com.zeiterfassung.web.common.impl.navigate;
 
 import com.zeiterfassung.web.common.book.record.BookRecordEntry;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -17,7 +18,7 @@ public abstract class BaseWebBookNavigator<T extends BaseWebNavigatorHelper> ext
 
    public void navigateToBookingPage(BookRecordEntry bookRecordEntry) {
       navigateToBookingPage4BookRecord(bookRecordEntry);
-      webNavigatorHelper.waitForElementWithId(getElementId2WaitForBookingPageReady());
+      webNavigatorHelper.waitForVisibilityOfElement(By.id(getElementId2WaitForBookingPageReady()), 4000);
    }
 
    /**

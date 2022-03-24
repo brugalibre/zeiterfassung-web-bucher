@@ -39,7 +39,7 @@ public class ProlesWebElementIdEvaluatorImpl implements ProlesWebElementIdEvalua
    @Override
    public String evalRowIdByCustomerProjectAndActivity(WebElement searchContext, String customer, String projectName, String activity) {
       LOG.info("Evaluate row id by customer '{}', project '{}' and activity '{}'", customer, projectName, activity);
-      List<WebElement> projectWebElements = webElementEvaluator.findWebElementByTagNameAndTextValue(searchContext, HTML_TAG_SPAN, projectName);
+      List<WebElement> projectWebElements = webElementEvaluator.findAllWebElementsByPredicateAndBy(searchContext, By.tagName(HTML_TAG_SPAN), webElement -> projectName.equals(webElement.getText()));
       String id = evalRowIdByCustomerProjectAndActivityInternal(searchContext, customer, activity, projectWebElements);
       if (isNull(id)) {
          throwNoSuchIdException(searchContext, customer, projectName, activity, projectWebElements);
@@ -50,7 +50,7 @@ public class ProlesWebElementIdEvaluatorImpl implements ProlesWebElementIdEvalua
 
    private void throwNoSuchIdException(WebElement searchContext, String customer, String projectName, String activity, List<WebElement> projectWebElements) {
       String allProjects = WebElementUtil.appendWebElements2String(projectWebElements);
-      List<WebElement> activityWebElements = webElementEvaluator.findWebElementByTagNameAndTextValue(searchContext, HTML_TAG_SPAN, activity);
+      List<WebElement> activityWebElements = webElementEvaluator.findAllWebElementsByPredicateAndBy(searchContext, By.tagName(HTML_TAG_SPAN), webElement -> activity.equals(webElement.getText()));
       String allActivities = WebElementUtil.appendWebElements2String(activityWebElements);
       throw new NoSuchIdException("No id found in WebElement " + getWebElementString(searchContext) + " for customer '" + customer + "', project '" + projectName + "' and activity '" + activity
               + "'.\nAll found projects: " + allProjects + "\nAll found activities: " + allActivities);
@@ -68,13 +68,13 @@ public class ProlesWebElementIdEvaluatorImpl implements ProlesWebElementIdEvalua
    }
 
    private String evalId4NonUniqueWebElementMatch(WebElement searchContext, String customer, String activity) {
-      List<WebElement> activities = webElementEvaluator.findWebElementByTagNameAndTextValue(searchContext, HTML_TAG_SPAN, activity);
+      List<WebElement> activities =  webElementEvaluator.findAllWebElementsByPredicateAndBy(searchContext, By.tagName(HTML_TAG_SPAN), webElement -> activity.equals(webElement.getText()));
       if (activities.size() == 1) {
          LOG.info("Eval id for one unique found activity-WebElement {}", getWebElementString(activities.get(0)));
          return evalId4UniqueWebElementMatch(activities.get(0));
       }
       // TODO Match multiple activities and customers found..
-      List<WebElement> customers = webElementEvaluator.findWebElementByTagNameAndTextValue(searchContext, HTML_TAG_SPAN, customer);
+      List<WebElement> customers = webElementEvaluator.findAllWebElementsByPredicateAndBy(searchContext, By.tagName(HTML_TAG_SPAN), webElement -> customer.equals(webElement.getText()));
       LOG.error("No unique activity-WebElement found.. Evaluation of id not implemented for multiple activities." +
                       "\nFound activity-WebElements: {}.\nFound customer-WebElements: {} ", appendWebElements2String(activities),
               appendWebElements2String(customers));

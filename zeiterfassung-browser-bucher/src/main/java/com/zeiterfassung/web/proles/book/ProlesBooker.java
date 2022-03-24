@@ -6,6 +6,7 @@ import com.zeiterfassung.web.common.book.record.BookRecordEntry;
 import com.zeiterfassung.web.common.book.record.errorhandling.ErrorHandler;
 import com.zeiterfassung.web.common.book.record.impl.DummyBookRecordBuilder;
 import com.zeiterfassung.web.common.navigate.util.WebNavigateUtil;
+import com.zeiterfassung.web.proles.ProlesNavigatorHelper;
 import com.zeiterfassung.web.proles.book.record.ProlesBookRecordEntry;
 import com.zeiterfassung.web.proles.constant.ProlesWebConst;
 import com.zeiterfassung.web.proles.impl.navigate.ProlesWebNavigator;
@@ -18,7 +19,7 @@ import java.util.Optional;
 import static com.zeiterfassung.web.proles.constant.ProlesWebConst.WEB_ELEMENT_BOOK_TABLE_ID;
 import static com.zeiterfassung.web.proles.constant.ProlesWebConst.WEB_ELEMENT_ERROR_MESSAGEBOX_ID;
 
-public class ProlesBooker extends BaseWebBooker<ProlesWebNavigator> {
+public class ProlesBooker extends BaseWebBooker<ProlesWebNavigator, ProlesNavigatorHelper> {
 
    private static final Logger LOG = LoggerFactory.getLogger(ProlesBooker.class);
 
@@ -87,7 +88,7 @@ public class ProlesBooker extends BaseWebBooker<ProlesWebNavigator> {
       enterHours(rowId, prolesBookRecordEntry.getAmountOfHours());
       enterDescription(rowId, prolesBookRecordEntry.getDescription());
       submitEntry(rowId);
-      Optional<WebElement> messageboxOpt = baseWebNavigator.getHelper().findWebElementById(WEB_ELEMENT_ERROR_MESSAGEBOX_ID);
+      Optional<WebElement> messageboxOpt = baseWebNavigatorHelper.findWebElementById(WEB_ELEMENT_ERROR_MESSAGEBOX_ID);
       if (messageboxOpt.isPresent()) {
          WebElement messagebox = messageboxOpt.get();
          LOG.error("Error while booking record '{}': {}", prolesBookRecordEntry, messagebox.getText());

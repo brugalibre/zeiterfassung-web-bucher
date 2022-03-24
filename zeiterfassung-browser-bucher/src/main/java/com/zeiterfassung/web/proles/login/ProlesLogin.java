@@ -31,8 +31,8 @@ public class ProlesLogin extends ProlesWebNavigator {
     * @return <code>true</code> if the login was successful or <code>false</code> if not
     */
    public boolean doLogin() {
-      super.login();
-      Optional<WebElement> buttonOpt = findWebElementById(ProlesWebConst.WEB_ELEMENT_ANMELDE_BUTTON);
+      super.navigateToPageAndLogin();
+      Optional<WebElement> buttonOpt = this.webNavigatorHelper.findWebElementById(ProlesWebConst.WEB_ELEMENT_ANMELDE_BUTTON);
       boolean isLoggedIn = !buttonOpt.isPresent(); // successful when button is not visible anymore!
       logout();
       return isLoggedIn;

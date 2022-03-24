@@ -11,13 +11,18 @@ public class WebNavigateUtil {
    }
 
    /**
-    * Waits the given amount of miliseconds. If a {@link InterruptedException} occures, this is thrown as a {@link IllegalStateException}
+    * Waits the given amount of milliseconds. If a {@link InterruptedException} occurs, this is thrown as a {@link IllegalStateException}
+    * This m
     *
-    * @param timeInMilis the time to wait
+    * @param timeInMillis the time to wait
     */
-   public static void waitForMiliseconds(int timeInMilis) {
+   public static void waitForMilliseconds(int timeInMillis) {
       try {
-         Thread.sleep(timeInMilis);
+         int timeStayIdle = timeInMillis;
+         while (timeStayIdle > 0) {
+            Thread.sleep(Math.min(timeInMillis, SLEEP_INTERVAL));
+            timeStayIdle = timeStayIdle - SLEEP_INTERVAL;
+         }
       } catch (InterruptedException e) {
          throw new IllegalStateException(e);
       }

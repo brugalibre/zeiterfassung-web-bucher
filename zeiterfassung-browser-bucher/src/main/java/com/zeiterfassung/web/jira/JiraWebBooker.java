@@ -4,8 +4,9 @@ import com.zeiterfassung.web.common.book.BaseWebBooker;
 import com.zeiterfassung.web.common.book.record.BookRecordEntry;
 import com.zeiterfassung.web.common.book.record.errorhandling.ErrorHandler;
 import com.zeiterfassung.web.jira.navigator.JiraWebNavigator;
+import com.zeiterfassung.web.jira.navigator.JiraWebNavigatorHelper;
 
-public class JiraWebBooker extends BaseWebBooker<JiraWebNavigator> {
+public class JiraWebBooker extends BaseWebBooker<JiraWebNavigator, JiraWebNavigatorHelper> {
    protected JiraWebBooker(String userName, String userPassword, String propertiesName) {
       super(userName, userPassword, propertiesName);
    }

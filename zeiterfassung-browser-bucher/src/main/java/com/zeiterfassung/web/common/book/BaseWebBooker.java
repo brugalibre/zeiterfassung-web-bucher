@@ -56,7 +56,7 @@ public abstract class BaseWebBooker<B extends BaseWebBookNavigator<H>, H extends
     * @return the booked {@link BookRecord}
     */
    public BookRecord bookRecords(BookRecord bookRecord) {
-      baseWebNavigator.login();
+      baseWebNavigator.navigateToPageAndLogin();
       book(bookRecord);
       baseWebNavigator.logout();
       return bookRecord;
@@ -108,7 +108,7 @@ public abstract class BaseWebBooker<B extends BaseWebBookNavigator<H>, H extends
    protected abstract void bookSingleEntryInternal(BookRecordEntry prolesBookRecordEntry, ErrorHandler errorHandler);
 
    protected void enterHours(String id, String amountOfWorkedHours) {
-      WebElement hourWebElement = baseWebNavigatorHelper.findWebElementByNameTagNameAndValue(null, BaseWebConst.HTML_TAG_ENTRY, getComponentAttrName(), id);
+      WebElement hourWebElement = baseWebNavigatorHelper.getWebElementByNameTagNameAndValue(null, BaseWebConst.HTML_TAG_INPUT, getComponentAttrName(), id);
       hourWebElement.sendKeys(amountOfWorkedHours);
    }
 
