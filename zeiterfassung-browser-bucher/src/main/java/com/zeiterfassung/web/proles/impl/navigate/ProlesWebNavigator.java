@@ -1,6 +1,7 @@
 package com.zeiterfassung.web.proles.impl.navigate;
 
 import com.zeiterfassung.web.common.book.record.BookRecordEntry;
+import com.zeiterfassung.web.common.impl.navigate.BaseWebBookNavigator;
 import com.zeiterfassung.web.common.impl.navigate.BaseWebNavigator;
 import com.zeiterfassung.web.proles.ProlesNavigatorHelper;
 import com.zeiterfassung.web.proles.constant.ProlesWebConst;
@@ -13,7 +14,7 @@ import static com.zeiterfassung.web.proles.constant.ProlesWebConst.WEB_ELEMENT_D
  * The {@link ProlesWebNavigator} implements the proles specific methods, which
  * are defined as abstract  methods in the {@link BaseWebNavigator}
  */
-public class ProlesWebNavigator extends BaseWebNavigator<ProlesNavigatorHelper> {
+public class ProlesWebNavigator extends BaseWebBookNavigator<ProlesNavigatorHelper> {
    public ProlesWebNavigator(String userName, String userPassword, String propertiesName) {
       super(userName, userPassword, propertiesName);
    }

@@ -5,11 +5,10 @@ import com.zeiterfassung.web.common.book.record.BookRecordEntry;
 import com.zeiterfassung.web.common.book.record.errorhandling.ErrorHandler;
 import com.zeiterfassung.web.common.book.record.errorhandling.ExceptionEntry;
 import com.zeiterfassung.web.common.constant.BaseWebConst;
+import com.zeiterfassung.web.common.impl.navigate.BaseWebBookNavigator;
 import com.zeiterfassung.web.common.impl.navigate.BaseWebNavigator;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Action;
-import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,7 @@ import org.slf4j.LoggerFactory;
  *
  * @param <B> the specific type of the {@link BaseWebNavigator}
  */
-public abstract class BaseWebBooker<B extends BaseWebNavigator<?>> {
+public abstract class BaseWebBooker<B extends BaseWebBookNavigator<?>> {
 
    private static final Logger LOG = LoggerFactory.getLogger(BaseWebBooker.class);
    protected B baseWebNavigator;

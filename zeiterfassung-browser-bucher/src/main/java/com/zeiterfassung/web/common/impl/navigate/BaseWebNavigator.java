@@ -1,6 +1,5 @@
 package com.zeiterfassung.web.common.impl.navigate;
 
-import com.zeiterfassung.web.common.book.record.BookRecordEntry;
 import com.zeiterfassung.web.common.impl.DriverManagerHelper;
 import com.zeiterfassung.web.common.inout.PropertyReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -82,11 +81,6 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       webDriver.close();
    }
 
-   public void navigateToBookingPage(BookRecordEntry bookRecordEntry) {
-      navigateToBookingPage4BookRecord(bookRecordEntry);
-      webNavigatorHelper.waitForElementWithId(getElementId2WaitForBookingPageReady());
-   }
-
    public WebElement getElementById(String s) {
       return webDriver.findElement(By.id(s));
    }
@@ -111,15 +105,6 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    public Actions createNewActions() {
       return new Actions(webDriver);
    }
-
-   /**
-    * @return the {@link WebElement} in which the booking date is entered
-    */
-   public abstract WebElement getBookingDateInputField();
-
-   protected abstract void navigateToBookingPage4BookRecord(BookRecordEntry bookRecordEntry);
-
-   protected abstract String getElementId2WaitForBookingPageReady();
 
    protected void clickButtonByIdAndWait(String buttonId) {
       WebElement button = getElementById(buttonId);
