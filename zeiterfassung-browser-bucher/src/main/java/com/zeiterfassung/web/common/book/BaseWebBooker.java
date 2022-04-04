@@ -7,6 +7,8 @@ import com.zeiterfassung.web.common.book.record.errorhandling.ExceptionEntry;
 import com.zeiterfassung.web.common.constant.BaseWebConst;
 import com.zeiterfassung.web.common.impl.navigate.BaseWebBookNavigator;
 import com.zeiterfassung.web.common.impl.navigate.BaseWebNavigator;
+import com.zeiterfassung.web.common.impl.navigate.BaseWebNavigatorHelper;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
@@ -19,10 +21,11 @@ import org.slf4j.LoggerFactory;
  *
  * @param <B> the specific type of the {@link BaseWebNavigator}
  */
-public abstract class BaseWebBooker<B extends BaseWebBookNavigator<?>> {
+public abstract class BaseWebBooker<B extends BaseWebBookNavigator<H>, H extends BaseWebNavigatorHelper> {
 
    private static final Logger LOG = LoggerFactory.getLogger(BaseWebBooker.class);
    protected B baseWebNavigator;
+   protected H baseWebNavigatorHelper;
 
    protected BaseWebBooker(String userName, String userPassword, String propertiesName) {
       this.baseWebNavigator = createWebNavigator(userName, userPassword, propertiesName);
@@ -42,7 +45,8 @@ public abstract class BaseWebBooker<B extends BaseWebBookNavigator<?>> {
     * Initializes this {@link BaseWebBooker} and its resources
     */
    protected void initBooker() {
-      baseWebNavigator.initWebDriver();
+      this.baseWebNavigator.initWebDriver();
+      this.baseWebNavigatorHelper = baseWebNavigator.getHelper();
    }
 
    /**
@@ -104,19 +108,19 @@ public abstract class BaseWebBooker<B extends BaseWebBookNavigator<?>> {
    protected abstract void bookSingleEntryInternal(BookRecordEntry prolesBookRecordEntry, ErrorHandler errorHandler);
 
    protected void enterHours(String id, String amountOfWorkedHours) {
-      WebElement hourWebElement = baseWebNavigator.findWebElementByNameTagNameAndValue(null, BaseWebConst.HTML_TAG_ENTRY, getComponentAttrName(), id);
+      WebElement hourWebElement = baseWebNavigatorHelper.findWebElementByNameTagNameAndValue(null, BaseWebConst.HTML_TAG_ENTRY, getComponentAttrName(), id);
       hourWebElement.sendKeys(amountOfWorkedHours);
    }
 
    protected abstract String getComponentAttrName();
 
    protected void enterDescription(String id, String description) {
-      WebElement descriptionWebElement = baseWebNavigator.getElementById(id);
+      WebElement descriptionWebElement = baseWebNavigatorHelper.getElement(By.id(id));
       descriptionWebElement.sendKeys(description);
    }
 
    protected void submitEntry(String id) {
-      WebElement descriptionWebElement = baseWebNavigator.getElementById(id);
+      WebElement descriptionWebElement = baseWebNavigatorHelper.getElement(By.id(id));
       descriptionWebElement.sendKeys(Keys.ENTER);
    }
 }

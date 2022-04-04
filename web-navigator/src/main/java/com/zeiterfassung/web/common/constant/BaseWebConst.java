@@ -2,6 +2,8 @@ package com.zeiterfassung.web.common.constant;
 
 public class BaseWebConst {
 
+   public static final String CLICK_BUTTON_SCRIPT = "arguments[0].click();";
+
    // HTML-Tags
    public static final String HTML_TAG_ENTRY = "entry";
    public static final String HTML_TAG_INPUT = "input";

@@ -3,6 +3,7 @@ package com.zeiterfassung.web;
 import com.zeiterfassung.web.common.impl.DriverManagerHelper;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.DriverManagerType;
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import static java.util.Objects.nonNull;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -66,6 +66,6 @@ public class DriverManagerHelperTest {
       this.testWebDriver = driverManagerHelper.createNewWebDriver();
 
       // Then
-      assertThat(testWebDriver, is(instanceOf(FirefoxDriver.class)));
+      assertThat(testWebDriver, is(CoreMatchers.instanceOf(FirefoxDriver.class)));
    }
 }

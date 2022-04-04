@@ -2,29 +2,26 @@ plugins {
     id 'java-library'
     id 'application'
     id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+	id 'com.github.johnrengelman.shadow' version '5.2.0'
 }
 
-group 'com.zeiterfassung.browserbucher'
+group 'com.web.navigator'
 version '1.0-SNAPSHOT'
+
+mainClassName = 'com.zeiterfassung.web.common.impl.navigate.BaseWebNavigator'
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
-mainClassName = 'com.zeiterfassung.web.proles.book.ProlesBooker'
-
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
 
     testImplementation group: 'junit', name: 'junit', version: '4.11'
-    implementation group: 'com.web.navigator', name: 'web-navigator', version: '1.0-SNAPSHOT'
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     implementation group: 'org.hamcrest', name: 'java-hamcrest', version: '2.0.0.0'
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.5'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     implementation 'io.github.bonigarcia:webdrivermanager:5.0.3'
     implementation('org.seleniumhq.selenium:selenium-java:4.0.0') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'

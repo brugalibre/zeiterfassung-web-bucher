@@ -7,16 +7,19 @@ plugins {
 group 'com.proles-ticket-to-json'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 mainClassName = 'com.zeiterfassung.web.proles.proles2json.ProlesTicketToJson'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
 dependencies {
 
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.5'
+    implementation group: 'com.zeiterfassung.browserbucher', name: 'zeiterfassung-web-bucher', version: '1.0-SNAPSHOT'
     implementation files('libs/zeiterfassung-web-bucher-1.0-SNAPSHOT.jar')
 }

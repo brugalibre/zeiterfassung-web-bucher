@@ -5,7 +5,7 @@ import com.zeiterfassung.web.common.book.record.BookRecord;
 import com.zeiterfassung.web.common.book.record.BookRecordEntry;
 import com.zeiterfassung.web.common.book.record.errorhandling.ErrorHandler;
 import com.zeiterfassung.web.common.book.record.impl.DummyBookRecordBuilder;
-import com.zeiterfassung.web.common.book.util.BookUtil;
+import com.zeiterfassung.web.common.navigate.util.WebNavigateUtil;
 import com.zeiterfassung.web.proles.book.record.ProlesBookRecordEntry;
 import com.zeiterfassung.web.proles.constant.ProlesWebConst;
 import com.zeiterfassung.web.proles.impl.navigate.ProlesWebNavigator;
@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
-import static com.zeiterfassung.web.proles.constant.ProlesWebConst.*;
+import static com.zeiterfassung.web.proles.constant.ProlesWebConst.WEB_ELEMENT_BOOK_TABLE_ID;
+import static com.zeiterfassung.web.proles.constant.ProlesWebConst.WEB_ELEMENT_ERROR_MESSAGEBOX_ID;
 
 public class ProlesBooker extends BaseWebBooker<ProlesWebNavigator> {
 
@@ -77,7 +78,7 @@ public class ProlesBooker extends BaseWebBooker<ProlesWebNavigator> {
       super.navigateToBookingPage(bookRecordEntry);
       enterDate(bookRecordEntry.getDate());
       baseWebNavigator.waitForElementWithId(WEB_ELEMENT_BOOK_TABLE_ID);
-      BookUtil.waitForMiliseconds(300);// wait additionally time to make sure
+      WebNavigateUtil.waitForMilliseconds(300);// wait additionally time to make sure
    }
 
    @Override
@@ -86,7 +87,7 @@ public class ProlesBooker extends BaseWebBooker<ProlesWebNavigator> {
       enterHours(rowId, prolesBookRecordEntry.getAmountOfHours());
       enterDescription(rowId, prolesBookRecordEntry.getDescription());
       submitEntry(rowId);
-      Optional<WebElement> messageboxOpt = baseWebNavigator.findWebElementById(WEB_ELEMENT_ERROR_MESSAGEBOX_ID);
+      Optional<WebElement> messageboxOpt = baseWebNavigator.getHelper().findWebElementById(WEB_ELEMENT_ERROR_MESSAGEBOX_ID);
       if (messageboxOpt.isPresent()) {
          WebElement messagebox = messageboxOpt.get();
          LOG.error("Error while booking record '{}': {}", prolesBookRecordEntry, messagebox.getText());
