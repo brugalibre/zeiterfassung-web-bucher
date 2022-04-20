@@ -18,15 +18,10 @@ import static java.util.Objects.requireNonNull;
 public class WebElementEvaluatorImpl implements WebElementEvaluator {
 
    private static final Logger LOG = LoggerFactory.getLogger(WebElementEvaluatorImpl.class);
-   private WebDriver webDriver;
+   private final WebDriver webDriver;
 
    public WebElementEvaluatorImpl(WebDriver webDriver) {
       this.webDriver = requireNonNull(webDriver);
-   }
-
-   private static String getWebElementString(WebElement searchContext) {
-      return "tag-name: '" + searchContext.getTagName() + "', id: '" +
-              searchContext.getAttribute("id") + "'";
    }
 
    @Override
@@ -39,7 +34,7 @@ public class WebElementEvaluatorImpl implements WebElementEvaluator {
             foundWebElements4TagName.add(webElement4TagName);
          }
       }
-      LOG.info("Found {} WebElements for 'By'-condition {} and search-context {}", foundWebElements4TagName.size(), by, searchContext);
+      LOG.info("Found {} WebElements for 'By'-condition '{}' and search-context '{}'", foundWebElements4TagName.size(), by, searchContext);
       return foundWebElements4TagName;
    }
 

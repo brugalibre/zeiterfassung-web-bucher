@@ -1,25 +1,31 @@
 package com.zeiterfassung.web.common.impl.navigate;
 
 import com.zeiterfassung.web.common.WebElementEvaluator;
-import com.zeiterfassung.web.common.navigate.util.WebNavigateUtil;
 import com.zeiterfassung.web.common.impl.WebElementEvaluatorImpl;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.zeiterfassung.web.common.navigate.util.WebNavigateUtil;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.zeiterfassung.web.common.constant.BaseWebConst.CLICK_BUTTON_SCRIPT;
+import static com.zeiterfassung.web.common.constant.BaseWebConst.*;
 import static java.util.Objects.requireNonNull;
 
 public class BaseWebNavigatorHelper {
 
+   private static final Logger LOG = LoggerFactory.getLogger(BaseWebNavigatorHelper.class);
+   private static final String SCREENSHOT_SAVE_PATH = "logs/";
+   public static final String SCREENSHOT_NAME_PREFIX = "log-screenshot_%s_";
+   public static final String SCREENSHOT_FILE_TYPE = ".png";
    protected WebDriver webDriver;
    protected WebElementEvaluator webElementEvaluator;
 
@@ -78,7 +84,8 @@ public class BaseWebNavigatorHelper {
     * @return the first found web-element - if there is more than one
     */
    public WebElement getWebElementByNameTagNameAndValue(WebElement searchContext, String tagName, String attrName, String expectedAttrValue) {
-      return findWebElementBy(searchContext, WebNavigateUtil.createXPathBy(tagName, attrName, expectedAttrValue)).get();
+      return findWebElementBy(searchContext, WebNavigateUtil.createXPathBy(tagName, attrName, expectedAttrValue)).
+              orElseThrow(() -> new IllegalStateException("No WebElement found for tagName '" + tagName + "', attrName '" + attrName + "' and expected expectedAttrValue='" + expectedAttrValue + "'"));
    }
 
    /**
@@ -91,7 +98,8 @@ public class BaseWebNavigatorHelper {
     * @return the first found web-element - if there is more than one
     */
    public WebElement getWebElementByTageNameAndInnerHtmlValue(WebElement searchContext, String tagName, String expectedInnerHtmlValue) {
-      return findWebElementByPredicateAndBy(searchContext, By.tagName(tagName), webElement4TagName -> expectedInnerHtmlValue.equals(webElement4TagName.getText())).get();
+      return findWebElementByPredicateAndBy(searchContext, By.tagName(tagName), webElement4TagName -> expectedInnerHtmlValue.equals(webElement4TagName.getText())).
+              orElseThrow(() -> new IllegalStateException("No WebElement found for tagName '" + tagName + "' and expected inner-html value='" + expectedInnerHtmlValue + "'"));
    }
 
    /**
@@ -213,16 +221,42 @@ public class BaseWebNavigatorHelper {
    }
 
    public void waitForInvisibilityOfElementBy(By by) {
-      WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofMillis(4000));
+      this.waitForInvisibilityOfElementBy(by, 4000);
+   }
+
+   public void waitForInvisibilityOfElementBy(By by, long millis) {
+      WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofMillis(millis));
       wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
    }
 
    public void executeClickButtonScript(WebElement webElement) {
+      executeScript(SCROLL_INTO_VIEW_SCRIPT, webElement);
       executeScript(CLICK_BUTTON_SCRIPT, webElement);
    }
 
    protected void executeScript(String script, WebElement webElement) {
       JavascriptExecutor executor = (JavascriptExecutor) webDriver;
       executor.executeScript(script, webElement);
+   }
+
+   /**
+    * Takes a screenshot of the current displayed browser and copies the file
+    * to 'logs\name-of-file'
+    *
+    * @param fileSuffixIn the suffix which is appended to the created
+    */
+   public void takeScreenshot(String fileSuffixIn) {
+      String fileSuffix = removeInvalidCharacters(fileSuffixIn);
+      File screenshotFile = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);
+      try {
+         String screenshotFileName = String.format(SCREENSHOT_SAVE_PATH + SCREENSHOT_NAME_PREFIX + fileSuffix + SCREENSHOT_FILE_TYPE, System.currentTimeMillis());
+         FileUtils.copyFile(screenshotFile, new File(screenshotFileName));
+      } catch (IOException e) {
+         LOG.error("Error while saving a screenshot!", e);
+      }
+   }
+
+   private static String removeInvalidCharacters(String fileSuffixIn) {
+      return fileSuffixIn.replace("\n", "").replace(" ", "_").replace(".", "_").replace(":", "_");
    }
 }
