@@ -26,6 +26,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
 
+   private static final Duration PAGE_LOAD_TIME_OUT = Duration.of(10, ChronoUnit.SECONDS);
    protected T webNavigatorHelper;
 
    private WebDriver webDriver;
@@ -187,7 +188,7 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
               .maximize();
       this.webDriver.manage()
               .timeouts()
-              .pageLoadTimeout(Duration.of(10, ChronoUnit.SECONDS));
+              .pageLoadTimeout(PAGE_LOAD_TIME_OUT);
    }
 }
 
