@@ -12,6 +12,9 @@ public class BaseWebConst {
    public static final String HTML_TAG_INPUT = "input";
    public static final String HTML_TAG_SPAN = "span";
    public static final String HTML_TAG_TABLE_TR = "tr";
+   public static final String HTML_TAG_H1 = "h1";
+   public static final String HTML_TAG_H2 = "h2";
+   public static final String HTML_TAG_P = "p";
 
    private BaseWebConst() {
       // privé

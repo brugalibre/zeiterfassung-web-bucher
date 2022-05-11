@@ -84,6 +84,7 @@ public class BaseWebNavigatorHelper {
     * @return the first found web-element - if there is more than one
     */
    public WebElement getWebElementByNameTagNameAndValue(WebElement searchContext, String tagName, String attrName, String expectedAttrValue) {
+      LOG.info("Looking for WebElement with tag-name '{}' and expected attr-value '{}'", tagName, expectedAttrValue);
       return findWebElementBy(searchContext, WebNavigateUtil.createXPathBy(tagName, attrName, expectedAttrValue)).
               orElseThrow(() -> new IllegalStateException("No WebElement found for tagName '" + tagName + "', attrName '" + attrName + "' and expected expectedAttrValue='" + expectedAttrValue + "'"));
    }
@@ -98,6 +99,7 @@ public class BaseWebNavigatorHelper {
     * @return the first found web-element - if there is more than one
     */
    public WebElement getWebElementByTageNameAndInnerHtmlValue(WebElement searchContext, String tagName, String expectedInnerHtmlValue) {
+      LOG.info("Looking for WebElement with tag-name '{}' and inner html value '{}'", tagName, expectedInnerHtmlValue);
       return findWebElementByPredicateAndBy(searchContext, By.tagName(tagName), webElement4TagName -> expectedInnerHtmlValue.equals(webElement4TagName.getText())).
               orElseThrow(() -> new IllegalStateException("No WebElement found for tagName '" + tagName + "' and expected inner-html value='" + expectedInnerHtmlValue + "'"));
    }
@@ -113,6 +115,7 @@ public class BaseWebNavigatorHelper {
     * @return the first found web-element - if there is more than one
     */
    public Optional<WebElement> findWebElementByTageNameAndInnerHtmlValue(WebElement searchContext, String tagName, String expectedInnerHtmlValue) {
+      LOG.info("Looking for WebElement with tag-name '{}' and inner html value '{}'", tagName, expectedInnerHtmlValue);
       return findWebElementByPredicateAndBy(searchContext, By.tagName(tagName), webElement4TagName -> expectedInnerHtmlValue.equals(webElement4TagName.getText()));
    }
 
@@ -135,6 +138,7 @@ public class BaseWebNavigatorHelper {
     * @see findWebElementByTageNameAndInnerHtmlValue
     */
    public Optional<WebElement> findParentWebElement4ChildTagNameAndInnerHtmlValue(WebElement searchContext, String tagName, String expectedInnerHtmlValue, String parentsWebElementType) {
+      LOG.info("Looking for parent-WebElement with tag-name '{}', childs-tag-name '{}' and inner html value '{}'", parentsWebElementType, tagName, expectedInnerHtmlValue);
       Optional<WebElement> childWebElement = findWebElementByTageNameAndInnerHtmlValue(searchContext, tagName, expectedInnerHtmlValue);
       if (childWebElement.isEmpty()) {
          return Optional.empty();
