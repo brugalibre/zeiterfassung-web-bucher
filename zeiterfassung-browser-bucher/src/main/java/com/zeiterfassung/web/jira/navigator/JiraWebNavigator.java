@@ -2,7 +2,6 @@ package com.zeiterfassung.web.jira.navigator;
 
 import com.zeiterfassung.web.common.book.record.BookRecordEntry;
 import com.zeiterfassung.web.common.impl.navigate.BaseWebBookNavigator;
-import com.zeiterfassung.web.common.impl.navigate.BaseWebNavigatorHelper;
 import com.zeiterfassung.web.jira.constant.JiraWebConstant;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
