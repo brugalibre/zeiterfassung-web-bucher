@@ -15,6 +15,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
@@ -33,11 +34,11 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    private DriverManagerHelper driverManagerHelper;
 
    private final String userName;
-   private final String userPassword;
+   private final char[] userPassword;
    private String loginPage;
    private String proxy;
 
-   protected BaseWebNavigator(String userName, String userPassword, String propertiesName) {
+   protected BaseWebNavigator(String userName, char[] userPassword, String propertiesName) {
       this.userName = requireNonNull(userName);
       this.userPassword = requireNonNull(userPassword);
       readNonCredentialProperties(propertiesName);
@@ -57,7 +58,7 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
          WebDriverManager.getInstance(driverManagerType)
                  .proxy(proxy)
                  .proxyUser(userName)
-                 .proxyPass(userPassword)
+                 .proxyPass(String.valueOf(userPassword))
                  .setup();
       } else {
          WebDriverManager.getInstance(driverManagerType).setup();
@@ -171,7 +172,8 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
 
    private void enterUserPassword() {
       WebElement textUserPwd = webDriver.findElement(By.id(getUserPasswordInputFieldId()));
-      executeScript("arguments[0].setAttribute('value', '" + userPassword + "')", textUserPwd);
+      executeScript("arguments[0].setAttribute('value', '" + String.valueOf(userPassword) + "')", textUserPwd);
+      Arrays.fill(userPassword, '0');
    }
 
    private void readNonCredentialProperties(String propertiesName) {

@@ -27,7 +27,7 @@ public abstract class BaseWebBooker<B extends BaseWebBookNavigator<H>, H extends
    protected B baseWebNavigator;
    protected H baseWebNavigatorHelper;
 
-   protected BaseWebBooker(String userName, String userPassword, String propertiesName) {
+   protected BaseWebBooker(String userName, char[] userPassword, String propertiesName) {
       this.baseWebNavigator = createWebNavigator(userName, userPassword, propertiesName);
    }
 
@@ -39,7 +39,7 @@ public abstract class BaseWebBooker<B extends BaseWebBookNavigator<H>, H extends
     * @param propertiesName the name of the properties file with further details
     * @return a new created but not yet initialized {@link BaseWebNavigator}
     */
-   protected abstract B createWebNavigator(String userName, String userPassword, String propertiesName);
+   protected abstract B createWebNavigator(String userName, char[] userPassword, String propertiesName);
 
    /**
     * Initializes this {@link BaseWebBooker} and its resources

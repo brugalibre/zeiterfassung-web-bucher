@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 public class JiraWebNavigator extends BaseWebBookNavigator<JiraWebNavigatorHelper> {
-   public JiraWebNavigator(String userName, String userPassword, String propertiesName) {
+   public JiraWebNavigator(String userName, char[] userPassword, String propertiesName) {
       super(userName, userPassword, propertiesName);
    }
 

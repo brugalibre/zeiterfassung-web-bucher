@@ -7,12 +7,12 @@ import com.zeiterfassung.web.jira.navigator.JiraWebNavigator;
 import com.zeiterfassung.web.jira.navigator.JiraWebNavigatorHelper;
 
 public class JiraWebBooker extends BaseWebBooker<JiraWebNavigator, JiraWebNavigatorHelper> {
-   protected JiraWebBooker(String userName, String userPassword, String propertiesName) {
+   protected JiraWebBooker(String userName, char[] userPassword, String propertiesName) {
       super(userName, userPassword, propertiesName);
    }
 
    @Override
-   protected JiraWebNavigator createWebNavigator(String userName, String userPassword, String propertiesName) {
+   protected JiraWebNavigator createWebNavigator(String userName, char[] userPassword, String propertiesName) {
       return new JiraWebNavigator(userName, userPassword, propertiesName);
    }
 

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class ProlesLogin extends ProlesWebNavigator {
 
-   private ProlesLogin(String userName, String userPassword) {
+   private ProlesLogin(String userName, char[] userPassword) {
       super(userName, userPassword, ProlesWebConst.PROLES_BOOKING_PROPERTIES_FILE_NAME);
    }
 
@@ -19,7 +19,7 @@ public class ProlesLogin extends ProlesWebNavigator {
     * @param userPassword the user-password
     * @return a new {@link ProlesLogin}
     */
-   public static ProlesLogin createProlesTicketExtractor(String userName, String userPassword) {
+   public static ProlesLogin createProlesTicketExtractor(String userName, char[] userPassword) {
       ProlesLogin prolesLogin = new ProlesLogin(userName, userPassword);
       prolesLogin.initWebDriver();
       return prolesLogin;
@@ -33,7 +33,7 @@ public class ProlesLogin extends ProlesWebNavigator {
    public boolean doLogin() {
       super.navigateToPageAndLogin();
       Optional<WebElement> buttonOpt = this.webNavigatorHelper.findWebElementById(ProlesWebConst.WEB_ELEMENT_ANMELDE_BUTTON);
-      boolean isLoggedIn = !buttonOpt.isPresent(); // successful when button is not visible anymore!
+      boolean isLoggedIn = buttonOpt.isEmpty(); // successful when button is not visible anymore!
       logout();
       return isLoggedIn;
    }

@@ -23,14 +23,14 @@ public class ProlesBooker extends BaseWebBooker<ProlesWebNavigator, ProlesNaviga
 
    private static final Logger LOG = LoggerFactory.getLogger(ProlesBooker.class);
 
-   private ProlesBooker(String userName, String userPassword) {
+   private ProlesBooker(String userName, char[] userPassword) {
       super(userName, userPassword, ProlesWebConst.PROLES_BOOKING_PROPERTIES_FILE_NAME);
    }
 
    public static void main(String[] argv) {
       try {
          verifyArgs(argv);
-         BookRecord bookedBookRecord = bookDummyBookRecord(argv[0], argv[1]);
+         BookRecord bookedBookRecord = bookDummyBookRecord(argv[0], argv[1].toCharArray());
          logBookingResult(bookedBookRecord);
       } catch (Exception e) {
          LOG.error("Error running ProlesBooker", e);
@@ -58,19 +58,19 @@ public class ProlesBooker extends BaseWebBooker<ProlesWebNavigator, ProlesNaviga
     * @param userPassword the user-password
     * @return a new {@link ProlesBooker}
     */
-   public static ProlesBooker createAndInitBooker(String userName, String userPassword) {
+   public static ProlesBooker createAndInitBooker(String userName, char[] userPassword) {
       ProlesBooker prolesBooker = new ProlesBooker(userName, userPassword);
       prolesBooker.initBooker();
       return prolesBooker;
    }
 
-   public static BookRecord bookDummyBookRecord(String userName, String userPassword) {
+   public static BookRecord bookDummyBookRecord(String userName, char[] userPassword) {
       ProlesBooker booker = createAndInitBooker(userName, userPassword);
       return booker.bookRecords(DummyBookRecordBuilder.getDummyBookRecord());
    }
 
    @Override
-   protected ProlesWebNavigator createWebNavigator(String userName, String userPassword, String propertiesName) {
+   protected ProlesWebNavigator createWebNavigator(String userName, char[] userPassword, String propertiesName) {
       return new ProlesWebNavigator(userName, userPassword, propertiesName);
    }
 

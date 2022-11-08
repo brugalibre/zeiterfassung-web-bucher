@@ -12,7 +12,7 @@ import org.openqa.selenium.WebElement;
  */
 public abstract class BaseWebBookNavigator<T extends BaseWebNavigatorHelper> extends BaseWebNavigator<T> {
 
-   protected BaseWebBookNavigator(String userName, String userPassword, String propertiesName) {
+   protected BaseWebBookNavigator(String userName, char[] userPassword, String propertiesName) {
       super(userName, userPassword, propertiesName);
    }
 

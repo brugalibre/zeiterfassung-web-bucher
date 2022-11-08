@@ -16,7 +16,7 @@ import static com.zeiterfassung.web.proles.constant.ProlesWebConst.WEB_ELEMENT_D
  * are defined as abstract  methods in the {@link BaseWebNavigator}
  */
 public class ProlesWebNavigator extends BaseWebBookNavigator<ProlesNavigatorHelper> {
-   public ProlesWebNavigator(String userName, String userPassword, String propertiesName) {
+   public ProlesWebNavigator(String userName, char[] userPassword, String propertiesName) {
       super(userName, userPassword, propertiesName);
    }
 

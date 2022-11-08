@@ -1,0 +1,4 @@
+rootProject.name = 'common-web-navigator'
+include 'web-navigator'
+include 'zeiterfassung-browser-bucher'
+include 'proles-ticket-to-json'

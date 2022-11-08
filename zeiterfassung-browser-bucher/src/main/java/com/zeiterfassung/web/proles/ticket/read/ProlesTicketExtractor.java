@@ -28,12 +28,12 @@ public class ProlesTicketExtractor extends ProlesWebNavigator {
    private static final String WHITE_SPACE_REPLACEMENT = "_";
    private static final String WHITE_SPACE = " ";
 
-   public ProlesTicketExtractor(String userName, String userPassword) {
+   public ProlesTicketExtractor(String userName, char[] userPassword) {
       super(userName, userPassword, PROLES_BOOKING_PROPERTIES_FILE_NAME);
    }
 
    public static void main(String[] args) {
-      createProlesTicketExtractor(args[0], args[1]).extractProlesTickets();
+      createProlesTicketExtractor(args[0], args[1].toCharArray()).extractProlesTickets();
    }
 
    /**
@@ -43,7 +43,7 @@ public class ProlesTicketExtractor extends ProlesWebNavigator {
     * @param userPassword the user-password
     * @return a new {@link com.zeiterfassung.web.proles.ticket.read.ProlesTicketExtractor}
     */
-   public static com.zeiterfassung.web.proles.ticket.read.ProlesTicketExtractor createProlesTicketExtractor(String userName, String userPassword) {
+   public static com.zeiterfassung.web.proles.ticket.read.ProlesTicketExtractor createProlesTicketExtractor(String userName, char[] userPassword) {
       ProlesTicketExtractor prolesTicketExtractor = new ProlesTicketExtractor(userName, userPassword);
       prolesTicketExtractor.initWebDriver();
       return prolesTicketExtractor;
