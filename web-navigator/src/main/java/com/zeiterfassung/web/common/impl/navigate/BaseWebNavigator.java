@@ -4,7 +4,9 @@ import com.zeiterfassung.web.common.impl.DriverManagerHelper;
 import com.zeiterfassung.web.common.inout.PropertyReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.DriverManagerType;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -27,12 +29,13 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
 
-   private static final Duration PAGE_LOAD_TIME_OUT = Duration.of(10, ChronoUnit.SECONDS);
    protected T webNavigatorHelper;
 
    private WebDriver webDriver;
    private DriverManagerHelper driverManagerHelper;
 
+   protected int pageLoadTimeOut;
+   protected int implicitWaitTimeOut;
    private final String userName;
    private final char[] userPassword;
    private String loginPage;
@@ -42,9 +45,10 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       this.userName = requireNonNull(userName);
       this.userPassword = requireNonNull(userPassword);
       readNonCredentialProperties(propertiesName);
+      readTimeoutProperties(propertiesName);
    }
 
-   public T getHelper(){
+   public T getHelper() {
       return webNavigatorHelper;
    }
 
@@ -147,18 +151,32 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       this.webNavigatorHelper.executeScript(script, webElement);
    }
 
-   protected void navigateToPage(String pageUrl) {
+   protected void navigateToPage(String pageUrlAsString) {
+      URL pageUrl = getUrl(pageUrlAsString);
       try {
-         webDriver.navigate()
-                 .to(new URL(pageUrl));
+         navigateToPageInternal(pageUrl);
+      } catch (TimeoutException e) {
+         // In case of time out, just try again.
+         navigateToPageInternal(pageUrl);
+      }
+   }
+
+   private static URL getUrl(String pageUrlAsString) {
+      try {
+         return new URL(pageUrlAsString);
       } catch (MalformedURLException e) {
          throw new IllegalStateException(e);
       }
    }
 
+   private void navigateToPageInternal(URL pageUrl) {
+      webDriver.navigate()
+              .to(pageUrl);
+   }
+
    private void clickSubmitButton() {
       String loginSubmitButtonId = getLoginSubmitButtonId();
-      if (nonNull(loginSubmitButtonId)){
+      if (nonNull(loginSubmitButtonId)) {
          submitButtonByIdAndWait4Disappear(loginSubmitButtonId);
       } else {
          WebElement submitButton = findLoginSubmitButton();
@@ -176,10 +194,16 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       Arrays.fill(userPassword, '0');
    }
 
+   private void readTimeoutProperties(String propertiesName) {
+      PropertyReader propertyReader = new PropertyReader(propertiesName);
+      pageLoadTimeOut = Integer.parseInt(propertyReader.readValueOrDefault("pageLoadTimeOut", "10"));
+      implicitWaitTimeOut = Integer.parseInt(propertyReader.readValueOrDefault("implicitWaitTimeOut", "10"));
+   }
+
    private void readNonCredentialProperties(String propertiesName) {
       PropertyReader propertyReader = new PropertyReader(propertiesName);
       loginPage = propertyReader.readValue("loginPage");
-      proxy = propertyReader.readValue("proxy");
+      proxy = propertyReader.readValueOrDefault("proxy", null);
       String browserName = propertyReader.readValue("browserName");
       this.driverManagerHelper = new DriverManagerHelper(browserName);
    }
@@ -190,7 +214,8 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
               .maximize();
       this.webDriver.manage()
               .timeouts()
-              .pageLoadTimeout(PAGE_LOAD_TIME_OUT);
+              .implicitlyWait(Duration.of(implicitWaitTimeOut, ChronoUnit.SECONDS))
+              .pageLoadTimeout(Duration.of(pageLoadTimeOut, ChronoUnit.SECONDS));
    }
 }
 

@@ -17,7 +17,7 @@ public class DriverManagerHelper {
 
    private static final DriverManagerType DEFAULT_WEB_DRIVER = DriverManagerType.CHROME;
    private static final Logger LOG = LoggerFactory.getLogger(DriverManagerHelper.class);
-   private DriverManagerType driverManagerType;
+   private final DriverManagerType driverManagerType;
 
    /**
     * Creates a new {@link DriverManagerHelper} for the given browser name
@@ -61,12 +61,18 @@ public class DriverManagerHelper {
 
    private static ChromeOptions buildChromeOptions() {
       ChromeOptions options = new ChromeOptions();
-      options.addArguments("--disable-dev-shm-usage"); // overcome limited resource problems
-      options.addArguments("start-maximized"); // open Browser in maximized mode
       options.addArguments("disable-infobars"); // disabling infobars
       options.addArguments("--disable-extensions"); // disabling extensions
-      options.addArguments("--disable-gpu"); // applicable to windows os only
-      options.addArguments("--no-sandbox"); // Bypass OS security model
+      // ChromeDriver is just AWFUL because every version or two it breaks unless you pass cryptic arguments
+      //AGRESSIVE: options.setPageLoadStrategy(PageLoadStrategy.NONE); // https://www.skptricks.com/2018/08/timed-out-receiving-message-from-renderer-selenium.html
+      options.addArguments("start-maximized"); // https://stackoverflow.com/a/26283818/1689770
+      options.addArguments("enable-automation"); // https://stackoverflow.com/a/43840128/1689770
+      options.addArguments("--no-sandbox"); //  Bypass OS security model -> https://stackoverflow.com/a/50725918/1689770
+      options.addArguments("--disable-dev-shm-usage"); //overcome limited resource problems -> https://stackoverflow.com/a/50725918/1689770
+      options.addArguments("--disable-browser-side-navigation"); //https://stackoverflow.com/a/49123152/1689770
+      options.addArguments("--disable-gpu"); // applicable to windows os only -> https://stackoverflow.com/questions/51959986/how-to-solve-selenium-chromedriver-timed-out-receiving-message-from-renderer-exc
+
+//This option was deprecated, see https://sqa.stackexchange.com/questions/32444/how-to-disable-infobar-from-chrome
       return options;
    }
 

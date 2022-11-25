@@ -15,19 +15,27 @@ import static java.util.Objects.requireNonNull;
 public class PropertyReader {
 
    private static final Logger LOG = LoggerFactory.getLogger(PropertyReader.class);
-   private String propertiesName;
+   private final String propertiesName;
 
    public PropertyReader(String propertiesName) {
       this.propertiesName = requireNonNull(propertiesName);
    }
 
    private static String readValue(String propKey, String propFile) {
+      String value = readValueOrDefault(propKey, propFile, null);
+      if (isNull(value)) {
+         throw new IllegalStateException("No value read for key '" + propKey + "'");
+      }
+      return value;
+   }
+
+   private static String readValueOrDefault(String propKey, String propFile, String defaultValue) {
       try (InputStream resourceStream = getInputStream(propFile)) {
          return readValue(resourceStream, propKey);
       } catch (IOException e) {
          LOG.error("Unable to read value for key '" + propKey + "' in property file '" + propFile + "'", e);
       }
-      throw new IllegalStateException("No value read for key '" + propKey + "'");
+      return defaultValue;
    }
 
    private static String readValue(InputStream resourceStream, String propKey) throws IOException {
@@ -52,5 +60,16 @@ public class PropertyReader {
     */
    public String readValue(String propKey) {
       return readValue(propKey, propertiesName);
+   }
+
+   /**
+    * Reads the value for the given properties-key
+    *
+    * @param propKey      the key of the properties to read
+    * @param defaultValue the default value which is returned, when there is no value associated for the given key
+    * @return the value for the given properties-key
+    */
+   public String readValueOrDefault(String propKey, String defaultValue) {
+      return readValueOrDefault(propKey, propertiesName, defaultValue);
    }
 }
