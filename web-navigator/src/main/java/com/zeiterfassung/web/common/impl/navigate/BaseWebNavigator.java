@@ -4,7 +4,6 @@ import com.zeiterfassung.web.common.impl.DriverManagerHelper;
 import com.zeiterfassung.web.common.inout.PropertyReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.DriverManagerType;
-import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -203,7 +202,7 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    private void readNonCredentialProperties(String propertiesName) {
       PropertyReader propertyReader = new PropertyReader(propertiesName);
       loginPage = propertyReader.readValue("loginPage");
-      proxy = propertyReader.readValueOrDefault("proxy", null);
+      proxy = propertyReader.readValue("proxy");
       String browserName = propertyReader.readValue("browserName");
       this.driverManagerHelper = new DriverManagerHelper(browserName);
    }

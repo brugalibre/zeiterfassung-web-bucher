@@ -19,8 +19,8 @@ repositories {
 
 dependencies {
 
-    implementation 'io.github.bonigarcia:webdrivermanager:5.3.1'
-    implementation('org.seleniumhq.selenium:selenium-java:4.6.0') {
+    api 'io.github.bonigarcia:webdrivermanager:5.3.1'
+    api('org.seleniumhq.selenium:selenium-java:4.6.0') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'

@@ -22,20 +22,12 @@ public class PropertyReader {
    }
 
    private static String readValue(String propKey, String propFile) {
-      String value = readValueOrDefault(propKey, propFile, null);
-      if (isNull(value)) {
-         throw new IllegalStateException("No value read for key '" + propKey + "'");
-      }
-      return value;
-   }
-
-   private static String readValueOrDefault(String propKey, String propFile, String defaultValue) {
       try (InputStream resourceStream = getInputStream(propFile)) {
          return readValue(resourceStream, propKey);
       } catch (IOException e) {
          LOG.error("Unable to read value for key '" + propKey + "' in property file '" + propFile + "'", e);
       }
-      return defaultValue;
+      throw new IllegalStateException("No value read for key '" + propKey + "'");
    }
 
    private static String readValue(InputStream resourceStream, String propKey) throws IOException {
@@ -70,6 +62,10 @@ public class PropertyReader {
     * @return the value for the given properties-key
     */
    public String readValueOrDefault(String propKey, String defaultValue) {
-      return readValueOrDefault(propKey, propertiesName, defaultValue);
+      String value = readValue(propKey, propertiesName);
+      if (isNull(value)) {
+         return defaultValue;
+      }
+      return value;
    }
 }
