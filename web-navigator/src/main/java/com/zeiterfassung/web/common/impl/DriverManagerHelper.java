@@ -41,12 +41,13 @@ public class DriverManagerHelper {
    }
 
    /**
+    * @param headless <code>true</code> if the browser should be started in a headless-mode or <code>false</code> if not
     * @return a new {@link WebDriver} instance for the {@link DriverManagerType} of this helper
     */
-   public WebDriver createNewWebDriver() {
+   public WebDriver createNewWebDriver(boolean headless) {
       try {
          if (driverManagerType == DriverManagerType.CHROME) {
-            ChromeOptions options = buildChromeOptions();
+            ChromeOptions options = buildChromeOptions(headless);
             return new ChromeDriver(options);
          }
          Class<?> webDriverClass = Class.forName(driverManagerType.browserClass());
@@ -56,7 +57,7 @@ public class DriverManagerHelper {
       }
    }
 
-   private static ChromeOptions buildChromeOptions() {
+   private static ChromeOptions buildChromeOptions(boolean headless) {
       ChromeOptions options = new ChromeOptions();
       options.addArguments("disable-infobars"); // disabling infobars
       options.addArguments("--disable-extensions"); // disabling extensions
@@ -70,6 +71,9 @@ public class DriverManagerHelper {
       options.addArguments("--disable-browser-side-navigation"); //https://stackoverflow.com/a/49123152/1689770
       options.addArguments("--disable-features=VizDisplayCompositor");
       options.addArguments("--disable-gpu"); // applicable to windows os only -> https://stackoverflow.com/questions/51959986/how-to-solve-selenium-chromedriver-timed-out-receiving-message-from-renderer-exc
+      if (headless) {
+         options.addArguments("--headless"); //https://stackoverflow.com/questions/50790733/unknown-error-devtoolsactiveport-file-doesnt-exist-error-while-executing-selen/50791503#50791503
+      }
 
 //This option was deprecated, see https://sqa.stackexchange.com/questions/32444/how-to-disable-infobar-from-chrome
       return options;

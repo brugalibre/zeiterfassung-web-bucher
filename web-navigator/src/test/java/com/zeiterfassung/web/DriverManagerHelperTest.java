@@ -63,7 +63,7 @@ public class DriverManagerHelperTest {
 
       // When
       WebDriverManager.getInstance(driverManagerHelper.getDriverManagerType()).setup();
-      this.testWebDriver = driverManagerHelper.createNewWebDriver();
+      this.testWebDriver = driverManagerHelper.createNewWebDriver(false);
 
       // Then
       assertThat(testWebDriver, is(CoreMatchers.instanceOf(FirefoxDriver.class)));

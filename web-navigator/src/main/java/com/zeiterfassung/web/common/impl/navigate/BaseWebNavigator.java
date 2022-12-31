@@ -56,6 +56,16 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
     * This method may take a while and needs a connection to the internet
     */
    public void initWebDriver() {
+      this.initWebDriver(false);
+   }
+
+   /**
+    * Initializes the {@link WebDriverManager} and creates a new {@link WebDriver}
+    * This method may take a while and needs a connection to the internet
+    *
+    * @param headless <code>true</code> if the browser should be started in a headless-mode or <code>false</code> if not
+    */
+   public void initWebDriver(boolean headless) {
       DriverManagerType driverManagerType = driverManagerHelper.getDriverManagerType();
       if (nonNull(proxy)) {
          WebDriverManager.getInstance(driverManagerType)
@@ -66,7 +76,7 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       } else {
          WebDriverManager.getInstance(driverManagerType).setup();
       }
-      this.webDriver = driverManagerHelper.createNewWebDriver();
+      this.webDriver = driverManagerHelper.createNewWebDriver(headless);
       setOptions();
       this.webNavigatorHelper = createWebNavigatorHelper(webDriver);
    }
@@ -208,9 +218,6 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    }
 
    private void setOptions() {
-      this.webDriver.manage()
-              .window()
-              .maximize();
       this.webDriver.manage()
               .timeouts()
               .implicitlyWait(Duration.of(implicitWaitTimeOut, ChronoUnit.SECONDS))
