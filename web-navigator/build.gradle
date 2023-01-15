@@ -6,12 +6,12 @@ plugins {
 }
 
 group 'com.brugalibre'
-version '1.0.1-SNAPSHOT'
+version '1.0.2-SNAPSHOT'
 
 mainClassName = 'com.zeiterfassung.web.common.impl.navigate.BaseWebNavigator'
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenCentral()
@@ -29,7 +29,7 @@ dependencies {
         exclude group: 'cglib', module: 'cglib-node'
     }
 
-    compileOnly 'org.slf4j:slf4j-api:2.0.4'
+    compileOnly 'org.slf4j:slf4j-api:2.0.5'
 
     testImplementation group: 'junit', name: 'junit', version: '4.11'
     testImplementation group: 'org.hamcrest', name: 'java-hamcrest', version: '2.0.0.0'
