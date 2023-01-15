@@ -36,10 +36,10 @@ public class ButtonClickHelper {
          Optional<WebElement> webElementButtonOptional = buttonWebElementSupplier.get();
          if (webElementButtonOptional.isPresent()) {
             WebElement buttonWebElement = webElementButtonOptional.get();
-            LOG.info("Button '{}' available. Waiting for it to become clickable", elementIdentifier);
+            LOG.debug("Button '{}' available. Waiting for it to become clickable", elementIdentifier);
             baseWebNavigatorHelper.waitForElementToBeClickable(buttonWebElement);
             buttonWebElement.click();
-            LOG.info("Button clicked '{}'", elementIdentifier);
+            LOG.debug("Button clicked '{}'", elementIdentifier);
          } else {
             LOG.warn("Button '{}' NOT available", elementIdentifier);
             doRetryIfPossible(buttonWebElementSupplier, errorHandler, elementIdentifier, retriesLeft);
@@ -51,10 +51,10 @@ public class ButtonClickHelper {
          String errorMsg = String.format("Click on button '%s' intercepted! Using script instead of direct click", elementIdentifier);
          logError("ElementClickInterceptedException: " + elementIdentifier, errorMsg, e);
          try {
-            LOG.info("Try to get the button again, using the provided Supplier {}..", buttonWebElementSupplier);
-            WebElement buttonWebElement = buttonWebElementSupplier.get().get();
+            LOG.debug("Try to get the button again, using the provided Supplier {}..", buttonWebElementSupplier);
+            WebElement buttonWebElement = buttonWebElementSupplier.get().orElseThrow(() -> new IllegalStateException("Button for identifier '" + elementIdentifier + "'not present!"));
             baseWebNavigatorHelper.executeClickButtonScript(buttonWebElement);
-            LOG.info("Button successfully clicked with script");
+            LOG.debug("Button successfully clicked with script");
          } catch (Exception clickScriptEx) {
             logError(clickScriptEx.getClass().getSimpleName() + ": " + elementIdentifier, String.format("Klick on button '%s' failed!", elementIdentifier), clickScriptEx);
             doRetryIfPossible(buttonWebElementSupplier, errorHandler, elementIdentifier, retriesLeft);

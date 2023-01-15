@@ -34,7 +34,7 @@ public class WebElementEvaluatorImpl implements WebElementEvaluator {
             foundWebElements4TagName.add(webElement4TagName);
          }
       }
-      LOG.info("Found {} WebElements for 'By'-condition '{}' and search-context '{}'", foundWebElements4TagName.size(), by, searchContext);
+      LOG.debug("Found {} WebElements for 'By'-condition '{}' and search-context '{}'", foundWebElements4TagName.size(), by, searchContext);
       return foundWebElements4TagName;
    }
 
