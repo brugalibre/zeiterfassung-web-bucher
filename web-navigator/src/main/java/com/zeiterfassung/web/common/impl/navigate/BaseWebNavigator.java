@@ -17,6 +17,7 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
@@ -36,7 +37,7 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    protected int pageLoadTimeOut;
    protected int implicitWaitTimeOut;
    private final String userName;
-   private final char[] userPassword;
+   private char[] userPassword;
    private String loginPage;
    private String proxy;
 
@@ -140,6 +141,10 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    protected void enterUserName() {
       WebElement textUserName = webDriver.findElement(By.id(getUserNameInputFieldId()));
       textUserName.sendKeys(userName);
+   }
+
+   protected void setUserPassword(char[] userPassword) {
+      this.userPassword = Objects.requireNonNull(userPassword);
    }
 
    /**
