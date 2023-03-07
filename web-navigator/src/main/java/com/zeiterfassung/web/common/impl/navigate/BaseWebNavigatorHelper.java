@@ -205,13 +205,18 @@ public class BaseWebNavigatorHelper {
       return nextWebElementOpt;
    }
 
-   public void waitForVisibilityOfElement(By by, long millis) {
-      WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofMillis(millis));
+   public void waitForVisibilityOfElement(By by, Duration duration) {
+      WebDriverWait wait = new WebDriverWait(webDriver, duration);
       wait.until(ExpectedConditions.visibilityOfElementLocated(by));
    }
 
    public void waitForElementToBeClickable(WebElement webElement) {
       waitForElementToBeClickable(webElement, Duration.ofMillis(8000));
+   }
+
+   public void waitForElementToBeClickable(By by, Duration duration) {
+      WebDriverWait wait = new WebDriverWait(webDriver, duration);
+      wait.until(ExpectedConditions.elementToBeClickable(by));
    }
 
    public void waitForElementToBeClickable(WebElement webElement, Duration duration) {

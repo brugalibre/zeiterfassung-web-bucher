@@ -115,7 +115,7 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    }
 
    public void waitForVisibilityOfElement(By by, long millis) {
-      this.webNavigatorHelper.waitForVisibilityOfElement(by, millis);
+      this.webNavigatorHelper.waitForVisibilityOfElement(by, Duration.ofMillis(millis));
    }
 
    /**
