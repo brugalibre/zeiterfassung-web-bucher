@@ -5,6 +5,8 @@ import com.zeiterfassung.web.common.impl.WebElementEvaluatorImpl;
 import com.zeiterfassung.web.common.navigate.util.WebNavigateUtil;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.HasDevTools;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -17,7 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static com.zeiterfassung.web.common.constant.BaseWebConst.*;
+import static com.zeiterfassung.web.common.constant.BaseWebConst.CLICK_BUTTON_SCRIPT;
+import static com.zeiterfassung.web.common.constant.BaseWebConst.SCROLL_INTO_VIEW_SCRIPT;
 import static java.util.Objects.requireNonNull;
 
 public class BaseWebNavigatorHelper {
@@ -32,6 +35,17 @@ public class BaseWebNavigatorHelper {
    public BaseWebNavigatorHelper(WebDriver webDriver) {
       this.webDriver = requireNonNull(webDriver);
       this.webElementEvaluator = new WebElementEvaluatorImpl(webDriver);
+
+   }
+
+   /**
+    * @return the {@link DevTools} if this {@link WebDriver} implements {@link HasDevTools}. Otherwise <code>null</code> is returned
+    */
+   public DevTools getDevTool() {
+      if (webDriver instanceof HasDevTools) {
+         return ((HasDevTools) webDriver).getDevTools();
+      }
+      return null;
    }
 
    /**
