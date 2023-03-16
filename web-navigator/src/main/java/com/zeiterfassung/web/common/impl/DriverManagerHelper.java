@@ -8,6 +8,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * The {@link DriverManagerHelper} helps to determine the corresponding {@link DriverManagerType} and {@link WebDriver} instance
  * a given String value
@@ -51,8 +53,8 @@ public class DriverManagerHelper {
             return new ChromeDriver(options);
          }
          Class<?> webDriverClass = Class.forName(driverManagerType.browserClass());
-         return (WebDriver) webDriverClass.newInstance();
-      } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+         return (WebDriver) webDriverClass.getConstructor().newInstance();
+      } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
          throw new IllegalStateException("Error while creating new WebDriver instance!", e);
       }
    }
@@ -70,6 +72,7 @@ public class DriverManagerHelper {
       options.addArguments("--disable-dev-shm-usage"); //overcome limited resource problems -> https://stackoverflow.com/a/50725918/1689770
       options.addArguments("--disable-browser-side-navigation"); //https://stackoverflow.com/a/49123152/1689770
       options.addArguments("--disable-features=VizDisplayCompositor");
+      options.addArguments("--remote-allow-origins=*");//https://groups.google.com/g/chromedriver-users/c/xL5-13_qGaA
       options.addArguments("--disable-gpu"); // applicable to windows os only -> https://stackoverflow.com/questions/51959986/how-to-solve-selenium-chromedriver-timed-out-receiving-message-from-renderer-exc
       if (headless) {
          options.addArguments("--headless"); //https://stackoverflow.com/questions/50790733/unknown-error-devtoolsactiveport-file-doesnt-exist-error-while-executing-selen/50791503#50791503
