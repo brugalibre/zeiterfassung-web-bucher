@@ -37,6 +37,7 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    protected int pageLoadTimeOut;
    protected int implicitWaitTimeOut;
    private final String userName;
+   private final boolean isHeadless;
    private char[] userPassword;
    private String loginPage;
    private String proxy;
@@ -44,6 +45,7 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    protected BaseWebNavigator(String userName, char[] userPassword, String propertiesName) {
       this.userName = requireNonNull(userName);
       this.userPassword = requireNonNull(userPassword);
+      this.isHeadless = readBooleanProperty("isHeadless", propertiesName);
       readNonCredentialProperties(propertiesName);
       readTimeoutProperties(propertiesName);
    }
@@ -57,7 +59,7 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
     * This method may take a while and needs a connection to the internet
     */
    public void initWebDriver() {
-      this.initWebDriver(false);
+      this.initWebDriver(isHeadless);
    }
 
    /**
@@ -212,6 +214,11 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       PropertyReader propertyReader = new PropertyReader(propertiesName);
       pageLoadTimeOut = Integer.parseInt(propertyReader.readValueOrDefault("pageLoadTimeOut", "10"));
       implicitWaitTimeOut = Integer.parseInt(propertyReader.readValueOrDefault("implicitWaitTimeOut", "10"));
+   }
+
+   private boolean readBooleanProperty(String propertyName, String propertiesName) {
+      PropertyReader propertyReader = new PropertyReader(propertiesName);
+      return Boolean.parseBoolean(propertyReader.readValueOrDefault(propertyName, "false"));
    }
 
    private void readNonCredentialProperties(String propertiesName) {
