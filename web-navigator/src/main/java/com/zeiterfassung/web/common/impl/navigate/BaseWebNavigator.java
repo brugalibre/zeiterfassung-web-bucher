@@ -11,6 +11,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,6 +31,7 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
 
+   private static final Logger LOG = LoggerFactory.getLogger(BaseWebNavigator.class);
    protected T webNavigatorHelper;
 
    private WebDriver webDriver;
@@ -230,6 +233,8 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    }
 
    private void setOptions() {
+      LOG.info("Setting options: implicitWaitTimeOut={}, " +
+              "pageLoadTimeOut={}, isHeadless={}", implicitWaitTimeOut, pageLoadTimeOut, isHeadless);
       this.webDriver.manage()
               .timeouts()
               .implicitlyWait(Duration.of(implicitWaitTimeOut, ChronoUnit.SECONDS))
