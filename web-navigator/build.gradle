@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'com.brugalibre'
-version '1.0.10-SNAPSHOT'
+version '1.0.11-SNAPSHOT'
 
 mainClassName = 'com.zeiterfassung.web.common.impl.navigate.BaseWebNavigator'
 
@@ -19,8 +19,8 @@ repositories {
 
 dependencies {
 
-    api 'io.github.bonigarcia:webdrivermanager:5.5.3'
-    api('org.seleniumhq.selenium:selenium-java:4.13.0') {
+    api 'io.github.bonigarcia:webdrivermanager:5.6.2'
+    api('org.seleniumhq.selenium:selenium-java:4.16.1') {
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-android-driver'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-iphone-driver'
         exclude group: 'org.seleniumhq.selenium', module: 'selenium-safari-driver'
