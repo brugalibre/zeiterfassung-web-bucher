@@ -4,10 +4,7 @@ import com.zeiterfassung.web.common.impl.DriverManagerHelper;
 import com.zeiterfassung.web.common.inout.PropertyReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.DriverManagerType;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -144,8 +141,15 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
    }
 
    protected void enterUserName() {
+      this.enterUserName(false);
+   }
+
+   protected void enterUserName(boolean withEnterKey) {
       WebElement textUserName = webDriver.findElement(By.id(getUserNameInputFieldId()));
       textUserName.sendKeys(userName);
+      if (withEnterKey) {
+         textUserName.sendKeys(Keys.RETURN);
+      }
    }
 
    protected void setUserPassword(char[] userPassword) {
@@ -207,10 +211,17 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
       return null;// by default this does nothing
    }
 
-   private void enterUserPassword() {
+   protected void enterUserPassword() {
+      this.enterUserPassword(false);
+   }
+
+   protected void enterUserPassword(boolean withEnterKey) {
       WebElement textUserPwd = webDriver.findElement(By.id(getUserPasswordInputFieldId()));
       executeScript("arguments[0].setAttribute('value', '" + String.valueOf(userPassword) + "')", textUserPwd);
       Arrays.fill(userPassword, '0');
+      if (withEnterKey) {
+         textUserPwd.sendKeys(Keys.RETURN);
+      }
    }
 
    private void readTimeoutProperties(String propertiesName) {
