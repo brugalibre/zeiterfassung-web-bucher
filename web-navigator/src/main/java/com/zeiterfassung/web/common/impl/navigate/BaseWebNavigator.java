@@ -251,5 +251,9 @@ public abstract class BaseWebNavigator<T extends BaseWebNavigatorHelper> {
               .implicitlyWait(Duration.of(implicitWaitTimeOut, ChronoUnit.SECONDS))
               .pageLoadTimeout(Duration.of(pageLoadTimeOut, ChronoUnit.SECONDS));
    }
+
+   public WebDriver getWebDriver() {
+      return webDriver;
+   }
 }
 
